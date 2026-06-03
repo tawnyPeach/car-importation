@@ -71,6 +71,12 @@ export default function Navigation({ lang }: { lang: string }) {
               </div>
             )}
           </div>
+          <Link href={`/${lang}/compare`} className="text-gray-700 hover:text-[#10b981] font-medium transition">
+            {lang === "fr" ? "Comparer" : "Compare"}
+          </Link>
+          <Link href={`/${lang}/financing`} className="text-gray-700 hover:text-[#10b981] font-medium transition">
+            {lang === "fr" ? "Financement" : "Financing"}
+          </Link>
           <Link href={`/${lang}/blog`} className="text-gray-700 hover:text-[#10b981] font-medium transition">
             Blog
           </Link>
@@ -115,6 +121,12 @@ export default function Navigation({ lang }: { lang: string }) {
               </Link>
             ))}
           </div>
+          <Link href={`/${lang}/compare`} className="block text-gray-700 font-medium" onClick={() => setMobileOpen(false)}>
+            {lang === "fr" ? "Comparer" : "Compare"}
+          </Link>
+          <Link href={`/${lang}/financing`} className="block text-gray-700 font-medium" onClick={() => setMobileOpen(false)}>
+            {lang === "fr" ? "Financement" : "Financing"}
+          </Link>
           <Link href={`/${lang}/blog`} className="block text-gray-700 font-medium" onClick={() => setMobileOpen(false)}>
             Blog
           </Link>
