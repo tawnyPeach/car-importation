@@ -2,6 +2,7 @@ import Link from "next/link";
 import countries from "@/data/countries.json";
 import sourceCountries from "@/data/source-countries.json";
 import { getTranslation, type Lang } from "@/lib/i18n";
+import EmailCapture from "@/components/EmailCapture";
 
 export default function Footer({ lang }: { lang: string }) {
   const t = (key: string) => getTranslation(lang as Lang, key);
@@ -90,8 +91,13 @@ export default function Footer({ lang }: { lang: string }) {
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} Car Import Calculator. All rights reserved.
+        <div className="border-t border-gray-700 mt-10 pt-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+            <EmailCapture compact />
+          </div>
+          <p className="text-center text-sm text-gray-500">
+            &copy; {new Date().getFullYear()} Car Import Calculator. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

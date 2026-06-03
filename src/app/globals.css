@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --navy: #1a1f36;
   --navy-light: #2d3354;
@@ -7,12 +9,28 @@
   --emerald-light: #34d399;
   --gold: #f59e0b;
   --gold-light: #fbbf24;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text-primary: #1a1f36;
+  --text-secondary: #4b5563;
+}
+
+.dark {
+  --bg-primary: #0f1218;
+  --bg-secondary: #1a1f36;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
 }
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: #1a1f36;
-  background: #f8fafc;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+.dark body {
+  color: var(--text-primary);
+  background: var(--bg-primary);
 }
 
 @keyframes fadeIn {

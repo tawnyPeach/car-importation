@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import countries from "@/data/countries.json";
+import DarkModeToggle from "@/components/DarkModeToggle";
 
 const flags: Record<string, string> = {
   morocco: "\u{1F1F2}\u{1F1E6}",
@@ -23,7 +24,7 @@ export default function Navigation({ lang }: { lang: string }) {
   const otherLang = lang === "en" ? "fr" : "en";
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100">
+    <header className="sticky top-0 z-50 bg-white/80 dark:bg-[#0f1218]/80 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800">
       <nav className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link href={`/${lang}`} className="flex items-center gap-2">
           <svg viewBox="0 0 200 50" className="h-8 w-auto" aria-label="Car Import Calculator">
@@ -86,6 +87,7 @@ export default function Navigation({ lang }: { lang: string }) {
           >
             {otherLang.toUpperCase()}
           </Link>
+          <DarkModeToggle />
         </div>
 
         {/* Mobile hamburger */}
@@ -133,6 +135,7 @@ export default function Navigation({ lang }: { lang: string }) {
           <Link href={`/${otherLang}`} className="inline-block px-3 py-1 rounded-full border border-[#10b981] text-[#10b981] text-sm font-semibold">
             {otherLang.toUpperCase()}
           </Link>
+          <DarkModeToggle />
         </div>
       )}
     </header>
