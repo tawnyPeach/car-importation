@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Morocco",
+    "slug": "morocco",
+    "dutyPetrol": 0.25,
+    "dutyDiesel": 0.30,
+    "vat": 0.20,
+    "fixedFees": 3000,
+    "currency": "MAD",
+    "eurRate": 11,
+    "languages": ["fr", "en"],
+    "localName": "maroc"
+  },
+  {
+    "name": "Algeria",
+    "slug": "algeria",
+    "dutyPetrol": 0.30,
+    "dutyDiesel": 0.35,
+    "vat": 0.19,
+    "fixedFees": 50000,
+    "currency": "DZD",
+    "eurRate": 145,
+    "languages": ["fr"],
+    "localName": "algerie"
+  },
+  {
+    "name": "Tunisia",
+    "slug": "tunisia",
+    "dutyPetrol": 0.20,
+    "dutyDiesel": 0.25,
+    "vat": 0.19,
+    "fixedFees": 2500,
+    "currency": "TND",
+    "eurRate": 3.3,
+    "languages": ["fr"],
+    "localName": "tunisie"
+  },
+  {
+    "name": "Senegal",
+    "slug": "senegal",
+    "dutyPetrol": 0.20,
+    "dutyDiesel": 0.25,
+    "vat": 0.18,
+    "fixedFees": 150000,
+    "currency": "XOF",
+    "eurRate": 656,
+    "languages": ["fr"],
+    "localName": "senegal"
+  },
+  {
+    "name": "Ivory Coast",
+    "slug": "ivory-coast",
+    "dutyPetrol": 0.20,
+    "dutyDiesel": 0.25,
+    "vat": 0.18,
+    "fixedFees": 150000,
+    "currency": "XOF",
+    "eurRate": 656,
+    "languages": ["fr"],
+    "localName": "cote-d-ivoire"
+  },
+  {
+    "name": "Turkey",
+    "slug": "turkey",
+    "dutyPetrol": 0.45,
+    "dutyDiesel": 0.50,
+    "vat": 0.18,
+    "fixedFees": 15000,
+    "currency": "TRY",
+    "eurRate": 35,
+    "languages": ["en"],
+    "localName": "turquie"
+  },
+  {
+    "name": "Egypt",
+    "slug": "egypt",
+    "dutyPetrol": 0.40,
+    "dutyDiesel": 0.45,
+    "vat": 0.14,
+    "fixedFees": 20000,
+    "currency": "EGP",
+    "eurRate": 52,
+    "languages": ["en"],
+    "localName": "egypte"
+  },
+  {
+    "name": "Nigeria",
+    "slug": "nigeria",
+    "dutyPetrol": 0.35,
+    "dutyDiesel": 0.35,
+    "vat": 0.075,
+    "fixedFees": 500000,
+    "currency": "NGN",
+    "eurRate": 1700,
+    "languages": ["en"],
+    "localName": "nigeria"
+  },
+  {
+    "name": "Ghana",
+    "slug": "ghana",
+    "dutyPetrol": 0.20,
+    "dutyDiesel": 0.25,
+    "vat": 0.15,
+    "fixedFees": 5000,
+    "currency": "GHS",
+    "eurRate": 16,
+    "languages": ["en"],
+    "localName": "ghana"
+  },
+  {
+    "name": "Saudi Arabia",
+    "slug": "saudi-arabia",
+    "dutyPetrol": 0.05,
+    "dutyDiesel": 0.05,
+    "vat": 0.15,
+    "fixedFees": 3000,
+    "currency": "SAR",
+    "eurRate": 4.1,
+    "languages": ["en"],
+    "localName": "arabie-saoudite"
+  }
+]

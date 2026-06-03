@@ -1,3 +1,5 @@
+import countries from "@/data/countries.json";
+
 export interface ImportCostBreakdown {
   carPrice: number;
   transportCost: number;
@@ -6,20 +8,30 @@ export interface ImportCostBreakdown {
   customsValue: number;
   dutyRate: number;
   dutyAmount: number;
+  vatRate: number;
   vatBase: number;
   vatAmount: number;
-  feesMAD: number;
+  feesLocal: number;
   feesEUR: number;
   totalEUR: number;
-  totalMAD: number;
-  eurToMadRate: number;
+  totalLocal: number;
+  currency: string;
+  eurToLocalRate: number;
+  countryName: string;
 }
 
 export function calculateImportCost(
   price: number,
   age: number,
-  fuelType: "petrol" | "diesel"
+  fuelType: "petrol" | "diesel",
+  countrySlug: string
 ): ImportCostBreakdown {
+  const country = countries.find((c) => c.slug === countrySlug);
+
+  if (!country) {
+    throw new Error(`Country not found: ${countrySlug}`);
+  }
+
   // Input validation: reject negative price
   if (price < 0) {
     return {
@@ -28,22 +40,25 @@ export function calculateImportCost(
       cif: 0,
       ageMultiplier: 1,
       customsValue: 0,
-      dutyRate: fuelType === "petrol" ? 0.25 : 0.3,
+      dutyRate: fuelType === "petrol" ? country.dutyPetrol : country.dutyDiesel,
       dutyAmount: 0,
+      vatRate: country.vat,
       vatBase: 0,
       vatAmount: 0,
-      feesMAD: 0,
-      feesEUR: 0,
+      feesLocal: country.fixedFees,
+      feesEUR: country.fixedFees / country.eurRate,
       totalEUR: 0,
-      totalMAD: 0,
-      eurToMadRate: 11,
+      totalLocal: 0,
+      currency: country.currency,
+      eurToLocalRate: country.eurRate,
+      countryName: country.name,
     };
   }
 
   // Clamp negative age to 0
   const clampedAge = Math.max(0, age);
 
-  const eurToMadRate = 11;
+  const eurToLocalRate = country.eurRate;
 
   // CIF = price * 1.05 (includes ~5% transport/insurance)
   const cif = price * 1.05;
@@ -64,21 +79,22 @@ export function calculateImportCost(
   // Customs value
   const customsValue = cif * ageMultiplier;
 
-  // Duty rate based on fuel type
-  const dutyRate = fuelType === "petrol" ? 0.25 : 0.3;
+  // Duty rate based on fuel type and country
+  const dutyRate = fuelType === "petrol" ? country.dutyPetrol : country.dutyDiesel;
   const dutyAmount = customsValue * dutyRate;
 
   // VAT
+  const vatRate = country.vat;
   const vatBase = customsValue + dutyAmount;
-  const vatAmount = vatBase * 0.2;
+  const vatAmount = vatBase * vatRate;
 
   // Fixed fees
-  const feesMAD = 3000;
-  const feesEUR = feesMAD / eurToMadRate;
+  const feesLocal = country.fixedFees;
+  const feesEUR = feesLocal / eurToLocalRate;
 
   // Total
   const totalEUR = cif + dutyAmount + vatAmount + feesEUR;
-  const totalMAD = totalEUR * eurToMadRate;
+  const totalLocal = totalEUR * eurToLocalRate;
 
   return {
     carPrice: price,
@@ -88,12 +104,15 @@ export function calculateImportCost(
     customsValue: Math.round(customsValue * 100) / 100,
     dutyRate,
     dutyAmount: Math.round(dutyAmount * 100) / 100,
+    vatRate,
     vatBase: Math.round(vatBase * 100) / 100,
     vatAmount: Math.round(vatAmount * 100) / 100,
-    feesMAD,
+    feesLocal,
     feesEUR: Math.round(feesEUR * 100) / 100,
     totalEUR: Math.round(totalEUR * 100) / 100,
-    totalMAD: Math.round(totalMAD * 100) / 100,
-    eurToMadRate,
+    totalLocal: Math.round(totalLocal * 100) / 100,
+    currency: country.currency,
+    eurToLocalRate,
+    countryName: country.name,
   };
 }

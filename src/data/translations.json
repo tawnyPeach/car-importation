@@ -1,0 +1,142 @@
+{
+  "en": {
+    "nav": {
+      "home": "Home",
+      "calculator": "Calculator",
+      "blog": "Blog",
+      "countries": "Countries"
+    },
+    "footer": {
+      "disclaimer": "This calculator provides estimates only. Actual costs may vary based on current regulations and exchange rates.",
+      "quickLinks": "Quick Links",
+      "about": "About Us"
+    },
+    "calculator": {
+      "title": "Car Import Cost Calculator",
+      "subtitle": "Calculate the total cost of importing a car including customs duty, VAT, and fees",
+      "priceLabel": "Car Price (EUR)",
+      "ageLabel": "Car Age (years)",
+      "fuelLabel": "Fuel Type",
+      "petrol": "Petrol",
+      "diesel": "Diesel",
+      "calculate": "Calculate",
+      "results": "Results",
+      "totalCost": "Total Cost",
+      "breakdown": "Cost Breakdown",
+      "carPrice": "Car Price",
+      "transport": "Transport & Insurance",
+      "duty": "Customs Duty",
+      "vat": "VAT",
+      "fees": "Fixed Fees",
+      "exchangeRate": "Exchange Rate"
+    },
+    "country": {
+      "popularCars": "Popular Cars to Import",
+      "regulations": "Import Regulations",
+      "faq": "Frequently Asked Questions",
+      "customsInfo": "Customs Information"
+    },
+    "budget": {
+      "title": "Cars by Budget",
+      "description": "Find the best cars to import within your budget",
+      "carsUnder": "Cars Under"
+    },
+    "category": {
+      "title": "Cars by Category",
+      "description": "Browse cars by category to find the perfect import"
+    },
+    "brand": {
+      "title": "Cars by Brand",
+      "description": "Explore popular car brands available for import"
+    },
+    "blog": {
+      "title": "Import Guide & Articles",
+      "readMore": "Read More",
+      "publishedOn": "Published on"
+    },
+    "common": {
+      "importTo": "Import to",
+      "from": "from Europe",
+      "costCalculator": "Cost Calculator",
+      "viewAll": "View All",
+      "learnMore": "Learn More",
+      "estimatedCost": "Estimated Cost"
+    },
+    "seo": {
+      "homeTitle": "Car Import Cost Calculator - Import Cars from Europe",
+      "homeDesc": "Calculate the total cost of importing a car from Europe. Get accurate estimates for customs duty, VAT, transport, and fees for multiple countries.",
+      "calculatorTitle": "Import Cost Calculator - Calculate Customs Duty & Fees",
+      "calculatorDesc": "Free car import cost calculator. Estimate customs duties, VAT, transport costs, and total fees for importing a car from Europe."
+    }
+  },
+  "fr": {
+    "nav": {
+      "home": "Accueil",
+      "calculator": "Calculateur",
+      "blog": "Blog",
+      "countries": "Pays"
+    },
+    "footer": {
+      "disclaimer": "Ce calculateur fournit des estimations uniquement. Les couts reels peuvent varier en fonction des reglementations et des taux de change actuels.",
+      "quickLinks": "Liens Rapides",
+      "about": "A Propos"
+    },
+    "calculator": {
+      "title": "Calculateur de Cout d'Importation",
+      "subtitle": "Calculez le cout total d'importation d'une voiture incluant les droits de douane, la TVA et les frais",
+      "priceLabel": "Prix du Vehicule (EUR)",
+      "ageLabel": "Age du Vehicule (annees)",
+      "fuelLabel": "Type de Carburant",
+      "petrol": "Essence",
+      "diesel": "Diesel",
+      "calculate": "Calculer",
+      "results": "Resultats",
+      "totalCost": "Cout Total",
+      "breakdown": "Detail des Couts",
+      "carPrice": "Prix du Vehicule",
+      "transport": "Transport et Assurance",
+      "duty": "Droits de Douane",
+      "vat": "TVA",
+      "fees": "Frais Fixes",
+      "exchangeRate": "Taux de Change"
+    },
+    "country": {
+      "popularCars": "Voitures Populaires a Importer",
+      "regulations": "Reglementations d'Importation",
+      "faq": "Questions Frequentes",
+      "customsInfo": "Informations Douanieres"
+    },
+    "budget": {
+      "title": "Voitures par Budget",
+      "description": "Trouvez les meilleures voitures a importer dans votre budget",
+      "carsUnder": "Voitures de Moins de"
+    },
+    "category": {
+      "title": "Voitures par Categorie",
+      "description": "Parcourez les voitures par categorie pour trouver l'importation ideale"
+    },
+    "brand": {
+      "title": "Voitures par Marque",
+      "description": "Explorez les marques de voitures populaires disponibles a l'importation"
+    },
+    "blog": {
+      "title": "Guide d'Importation et Articles",
+      "readMore": "Lire la Suite",
+      "publishedOn": "Publie le"
+    },
+    "common": {
+      "importTo": "Importer vers",
+      "from": "depuis l'Europe",
+      "costCalculator": "Calculateur de Cout",
+      "viewAll": "Voir Tout",
+      "learnMore": "En Savoir Plus",
+      "estimatedCost": "Cout Estime"
+    },
+    "seo": {
+      "homeTitle": "Calculateur de Cout d'Importation de Voiture - Importer depuis l'Europe",
+      "homeDesc": "Calculez le cout total d'importation d'une voiture depuis l'Europe. Obtenez des estimations precises pour les droits de douane, la TVA, le transport et les frais pour plusieurs pays.",
+      "calculatorTitle": "Calculateur de Cout d'Importation - Droits de Douane et Frais",
+      "calculatorDesc": "Calculateur gratuit de cout d'importation de voiture. Estimez les droits de douane, la TVA, les couts de transport et les frais totaux pour l'importation d'une voiture depuis l'Europe."
+    }
+  }
+}
