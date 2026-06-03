@@ -1,99 +1,134 @@
 "use client";
 
 import { useState } from "react";
-import { calculateImportCost, ImportCostBreakdown } from "@/lib/calculator";
-import ResultsCard from "./ResultsCard";
+import countries from "@/data/countries.json";
+import cars from "@/data/cars.json";
+import { calculateImportCost, type ImportCostBreakdown } from "@/lib/calculator";
+import CostBreakdown from "@/components/CostBreakdown";
 
-interface CalculatorFormProps {
-  defaultPrice?: number;
-  defaultAge?: number;
-  defaultFuelType?: "petrol" | "diesel";
-}
+export default function CalculatorForm({ lang }: { lang: string }) {
+  const [country, setCountry] = useState(countries[0].slug);
+  const [selectedCar, setSelectedCar] = useState("");
+  const [price, setPrice] = useState<number>(15000);
+  const [age, setAge] = useState<number>(4);
+  const [fuel, setFuel] = useState<"petrol" | "diesel">("petrol");
+  const [results, setResults] = useState<ImportCostBreakdown | null>(null);
 
-export default function CalculatorForm({
-  defaultPrice,
-  defaultAge,
-  defaultFuelType,
-}: CalculatorFormProps) {
-  const [price, setPrice] = useState<string>(defaultPrice?.toString() || "");
-  const [age, setAge] = useState<string>(defaultAge?.toString() || "");
-  const [fuelType, setFuelType] = useState<"petrol" | "diesel">(
-    defaultFuelType || "petrol"
-  );
-  const [results, setResults] = useState<ImportCostBreakdown | null>(
-    defaultPrice && defaultAge
-      ? calculateImportCost(defaultPrice, defaultAge, defaultFuelType || "petrol")
-      : null
-  );
+  const handleCarSelect = (slug: string) => {
+    setSelectedCar(slug);
+    if (slug) {
+      const car = cars.find((c) => c.slug === slug);
+      if (car) {
+        setPrice(car.averagePrice);
+        setAge(car.ageEstimate);
+        setFuel(car.fuelType as "petrol" | "diesel");
+      }
+    }
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const priceNum = parseFloat(price);
-    const ageNum = parseFloat(age);
-    if (isNaN(priceNum) || isNaN(ageNum) || priceNum <= 0 || ageNum < 0) return;
-    const result = calculateImportCost(priceNum, ageNum, fuelType);
+  const handleCalculate = () => {
+    const result = calculateImportCost(price, age, fuel, country);
     setResults(result);
   };
 
+  const labelClass = "block text-sm font-medium text-gray-700 mb-1";
+  const inputClass =
+    "w-full rounded-lg border border-gray-200 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#10b981] focus:border-transparent transition";
+
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="space-y-8">
+      <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
-              Car Price (EUR)
-            </label>
-            <input
-              type="number"
-              id="price"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              placeholder="e.g. 15000"
-              min="0"
-              step="100"
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-            />
-          </div>
-          <div>
-            <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-1">
-              Car Age (years)
-            </label>
-            <input
-              type="number"
-              id="age"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              placeholder="e.g. 5"
-              min="0"
-              max="30"
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-            />
-          </div>
-          <div>
-            <label htmlFor="fuelType" className="block text-sm font-medium text-gray-700 mb-1">
-              Fuel Type
+            <label className={labelClass}>
+              {lang === "fr" ? "Pays de destination" : "Destination Country"}
             </label>
             <select
-              id="fuelType"
-              value={fuelType}
-              onChange={(e) => setFuelType(e.target.value as "petrol" | "diesel")}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              className={inputClass}
             >
-              <option value="petrol">Petrol (Essence)</option>
-              <option value="diesel">Diesel (Gasoil)</option>
+              {countries.map((c) => (
+                <option key={c.slug} value={c.slug}>
+                  {c.name}
+                </option>
+              ))}
             </select>
           </div>
+
+          <div>
+            <label className={labelClass}>
+              {lang === "fr" ? "Choisir un vehicule" : "Select a Car"}
+            </label>
+            <select
+              value={selectedCar}
+              onChange={(e) => handleCarSelect(e.target.value)}
+              className={inputClass}
+            >
+              <option value="">
+                {lang === "fr" ? "-- Prix personnalise --" : "-- Custom Price --"}
+              </option>
+              {cars.map((c) => (
+                <option key={c.slug} value={c.slug}>
+                  {c.name} ({c.averagePrice.toLocaleString()} EUR)
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className={labelClass}>
+              {lang === "fr" ? "Prix (EUR)" : "Price (EUR)"}
+            </label>
+            <input
+              type="number"
+              min={0}
+              value={price}
+              onChange={(e) => setPrice(Number(e.target.value))}
+              className={inputClass}
+            />
+          </div>
+
+          <div>
+            <label className={labelClass}>
+              {lang === "fr" ? "Age (annees)" : "Age (years)"}
+            </label>
+            <input
+              type="number"
+              min={0}
+              max={30}
+              value={age}
+              onChange={(e) => setAge(Number(e.target.value))}
+              className={inputClass}
+            />
+          </div>
+
+          <div>
+            <label className={labelClass}>
+              {lang === "fr" ? "Type de carburant" : "Fuel Type"}
+            </label>
+            <select
+              value={fuel}
+              onChange={(e) => setFuel(e.target.value as "petrol" | "diesel")}
+              className={inputClass}
+            >
+              <option value="petrol">{lang === "fr" ? "Essence" : "Petrol"}</option>
+              <option value="diesel">Diesel</option>
+            </select>
+          </div>
+
+          <div className="flex items-end">
+            <button
+              onClick={handleCalculate}
+              className="w-full bg-[#10b981] hover:bg-[#059669] text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition-all"
+            >
+              {lang === "fr" ? "Calculer" : "Calculate"}
+            </button>
+          </div>
         </div>
-        <button
-          type="submit"
-          className="mt-4 w-full md:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition shadow-md hover:shadow-lg"
-        >
-          Calculate Import Cost
-        </button>
-      </form>
-      {results && <ResultsCard results={results} />}
+      </div>
+
+      {results && <CostBreakdown results={results} lang={lang} />}
     </div>
   );
 }
