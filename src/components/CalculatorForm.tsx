@@ -8,7 +8,7 @@ import { calculateImportCost, type ImportCostBreakdown } from "@/lib/calculator"
 import CostBreakdown from "@/components/CostBreakdown";
 import ShareAndExport from "@/components/ShareAndExport";
 
-function CalculatorFormInner({ lang }: { lang: string }) {
+function CalculatorFormInner({ lang, liveRates }: { lang: string; liveRates?: Record<string, number> }) {
   const searchParams = useSearchParams();
 
   const [country, setCountry] = useState(countries[0].slug);
@@ -61,7 +61,9 @@ function CalculatorFormInner({ lang }: { lang: string }) {
       const c = paramCountry && countries.find((ct) => ct.slug === paramCountry)
         ? paramCountry
         : countries[0].slug;
-      const result = calculateImportCost(p, a, f as "petrol" | "diesel", c);
+      const selectedCountry = countries.find((ct) => ct.slug === c);
+      const liveRate = selectedCountry && liveRates ? liveRates[selectedCountry.currency] : undefined;
+      const result = calculateImportCost(p, a, f as "petrol" | "diesel", c, liveRate);
       setResults(result);
     }
   }, [searchParams]);
@@ -79,7 +81,9 @@ function CalculatorFormInner({ lang }: { lang: string }) {
   };
 
   const handleCalculate = () => {
-    const result = calculateImportCost(price, age, fuel, country);
+    const selectedCountry = countries.find((c) => c.slug === country);
+    const liveRate = selectedCountry && liveRates ? liveRates[selectedCountry.currency] : undefined;
+    const result = calculateImportCost(price, age, fuel, country, liveRate);
     setResults(result);
   };
 
@@ -212,10 +216,10 @@ function CalculatorFormInner({ lang }: { lang: string }) {
   );
 }
 
-export default function CalculatorForm({ lang }: { lang: string }) {
+export default function CalculatorForm({ lang, liveRates }: { lang: string; liveRates?: Record<string, number> }) {
   return (
     <Suspense fallback={<div className="animate-pulse h-64 bg-gray-100 rounded-xl" />}>
-      <CalculatorFormInner lang={lang} />
+      <CalculatorFormInner lang={lang} liveRates={liveRates} />
     </Suspense>
   );
 }

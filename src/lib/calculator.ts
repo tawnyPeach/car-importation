@@ -24,7 +24,8 @@ export function calculateImportCost(
   price: number,
   age: number,
   fuelType: "petrol" | "diesel",
-  countrySlug: string
+  countrySlug: string,
+  liveRate?: number
 ): ImportCostBreakdown {
   const country = countries.find((c) => c.slug === countrySlug);
 
@@ -34,6 +35,7 @@ export function calculateImportCost(
 
   // Input validation: reject negative price
   if (price < 0) {
+    const eurToLocalRate = liveRate ?? country.eurRate;
     return {
       carPrice: 0,
       transportCost: 0,
@@ -46,11 +48,11 @@ export function calculateImportCost(
       vatBase: 0,
       vatAmount: 0,
       feesLocal: country.fixedFees,
-      feesEUR: country.fixedFees / country.eurRate,
+      feesEUR: country.fixedFees / eurToLocalRate,
       totalEUR: 0,
       totalLocal: 0,
       currency: country.currency,
-      eurToLocalRate: country.eurRate,
+      eurToLocalRate,
       countryName: country.name,
     };
   }
@@ -58,7 +60,7 @@ export function calculateImportCost(
   // Clamp negative age to 0
   const clampedAge = Math.max(0, age);
 
-  const eurToLocalRate = country.eurRate;
+  const eurToLocalRate = liveRate ?? country.eurRate;
 
   // CIF = price * 1.05 (includes ~5% transport/insurance)
   const cif = price * 1.05;

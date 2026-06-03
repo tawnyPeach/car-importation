@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getTranslation, type Lang } from "@/lib/i18n";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CalculatorForm from "@/components/CalculatorForm";
+import RatesBadge from "@/components/RatesBadge";
+import { getExchangeRates } from "@/lib/exchange-rates";
 
 export function generateStaticParams() {
   return [{ lang: "en" }, { lang: "fr" }];
@@ -39,6 +41,7 @@ export default async function CalculatorPage({
 }) {
   const { lang } = await params;
   const t = (key: string) => getTranslation(lang as Lang, key);
+  const ratesData = await getExchangeRates();
 
   const breadcrumbs = [
     { label: t("nav.home"), href: `/${lang}` },
@@ -56,9 +59,16 @@ export default async function CalculatorPage({
         <p className="text-lg text-gray-600">
           {t("calculator.subtitle")}
         </p>
+        <div className="mt-3">
+          <RatesBadge
+            lastUpdated={ratesData.lastUpdated}
+            isLive={ratesData.isLive}
+            lang={lang}
+          />
+        </div>
       </div>
 
-      <CalculatorForm lang={lang} />
+      <CalculatorForm lang={lang} liveRates={ratesData.rates} />
 
       {/* FAQ JSON-LD */}
       <script
