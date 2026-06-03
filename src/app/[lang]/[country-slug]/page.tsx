@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import countries from "@/data/countries.json";
 import cars from "@/data/cars.json";
-import { calculateImportCost } from "@/lib/calculator";
+import { calculateWithLiveRates } from "@/lib/calculate-with-live-rates";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CarGridWithFilters from "@/components/CarGridWithFilters";
 import type { CarWithCost } from "@/components/CarGridWithFilters";
@@ -126,26 +126,28 @@ export default async function CountryPage({
   const faqs = getFAQs(country, lang);
 
   // Calculate costs for all cars at the server level
-  const carsWithCosts: CarWithCost[] = cars.map((car) => {
-    const cost = calculateImportCost(
-      car.averagePrice,
-      car.ageEstimate,
-      car.fuelType as "petrol" | "diesel",
-      countrySlug
-    );
-    return {
-      name: car.name,
-      slug: car.slug,
-      averagePrice: car.averagePrice,
-      fuelType: car.fuelType,
-      ageEstimate: car.ageEstimate,
-      category: car.category,
-      brand: car.brand,
-      totalEUR: cost.totalEUR,
-      totalLocal: cost.totalLocal,
-      currency: cost.currency,
-    };
-  });
+  const carsWithCosts: CarWithCost[] = await Promise.all(
+    cars.map(async (car) => {
+      const cost = await calculateWithLiveRates(
+        car.averagePrice,
+        car.ageEstimate,
+        car.fuelType as "petrol" | "diesel",
+        countrySlug
+      );
+      return {
+        name: car.name,
+        slug: car.slug,
+        averagePrice: car.averagePrice,
+        fuelType: car.fuelType,
+        ageEstimate: car.ageEstimate,
+        category: car.category,
+        brand: car.brand,
+        totalEUR: cost.totalEUR,
+        totalLocal: cost.totalLocal,
+        currency: cost.currency,
+      };
+    })
+  );
 
   const breadcrumbs = [
     { label: lang === "fr" ? "Accueil" : "Home", href: `/${lang}` },

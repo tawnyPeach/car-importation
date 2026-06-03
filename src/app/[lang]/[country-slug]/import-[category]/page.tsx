@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import countries from "@/data/countries.json";
 import cars from "@/data/cars.json";
-import { calculateImportCost } from "@/lib/calculator";
+import { calculateWithLiveRates } from "@/lib/calculate-with-live-rates";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 const CATEGORIES = ["sedan", "suv", "hatchback", "luxury", "compact"] as const;
@@ -87,18 +87,19 @@ export default async function CategoryPage({
   ];
 
   // Filter cars by category and calculate costs
-  const categoryCars = cars
-    .filter((car) => car.category === category)
-    .map((car) => {
-      const cost = calculateImportCost(
-        car.averagePrice,
-        car.ageEstimate,
-        car.fuelType as "petrol" | "diesel",
-        countrySlug
-      );
-      return { car, cost };
-    })
-    .sort((a, b) => a.cost.totalEUR - b.cost.totalEUR);
+  const categoryCars = (await Promise.all(
+    cars
+      .filter((car) => car.category === category)
+      .map(async (car) => {
+        const cost = await calculateWithLiveRates(
+          car.averagePrice,
+          car.ageEstimate,
+          car.fuelType as "petrol" | "diesel",
+          countrySlug
+        );
+        return { car, cost };
+      })
+  )).sort((a, b) => a.cost.totalEUR - b.cost.totalEUR);
 
   // Other categories for internal linking
   const otherCategories = CATEGORIES.filter((c) => c !== category);

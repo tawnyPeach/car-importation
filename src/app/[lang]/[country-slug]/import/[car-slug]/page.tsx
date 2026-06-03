@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import countries from "@/data/countries.json";
 import cars from "@/data/cars.json";
 import { calculateImportCost } from "@/lib/calculator";
+import { calculateWithLiveRates } from "@/lib/calculate-with-live-rates";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 type Car = (typeof cars)[number];
@@ -34,7 +35,7 @@ export async function generateMetadata({
     return { title: "Not Found" };
   }
 
-  const cost = calculateImportCost(
+  const cost = await calculateWithLiveRates(
     car.averagePrice,
     car.ageEstimate,
     car.fuelType as "petrol" | "diesel",
@@ -141,7 +142,7 @@ export default async function CarImportPage({
     notFound();
   }
 
-  const cost = calculateImportCost(
+  const cost = await calculateWithLiveRates(
     car.averagePrice,
     car.ageEstimate,
     car.fuelType as "petrol" | "diesel",
@@ -444,8 +445,8 @@ export default async function CarImportPage({
             : `Import ${car.name} to Other Countries`}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {otherCountries.map((c) => {
-            const otherCost = calculateImportCost(
+          {await Promise.all(otherCountries.map(async (c) => {
+            const otherCost = await calculateWithLiveRates(
               car.averagePrice,
               car.ageEstimate,
               car.fuelType as "petrol" | "diesel",
@@ -463,7 +464,7 @@ export default async function CarImportPage({
                 </span>
               </Link>
             );
-          })}
+          }))}
         </div>
       </section>
 
@@ -476,8 +477,8 @@ export default async function CarImportPage({
               : `Other ${car.brand} Cars to Import to ${country.name}`}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {sameBrandCars.map((c) => {
-              const brandCost = calculateImportCost(
+            {await Promise.all(sameBrandCars.map(async (c) => {
+              const brandCost = await calculateWithLiveRates(
                 c.averagePrice,
                 c.ageEstimate,
                 c.fuelType as "petrol" | "diesel",
@@ -495,7 +496,7 @@ export default async function CarImportPage({
                   </p>
                 </Link>
               );
-            })}
+            }))}
           </div>
         </section>
       )}

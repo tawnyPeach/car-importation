@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import countries from "@/data/countries.json";
 import cars from "@/data/cars.json";
-import { calculateImportCost } from "@/lib/calculator";
+import { calculateWithLiveRates } from "@/lib/calculate-with-live-rates";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 const BUDGET_TIERS = [5000, 10000, 15000, 20000, 25000, 30000, 40000, 50000, 80000];
@@ -74,9 +74,9 @@ export default async function BudgetPage({
   ];
 
   // Filter cars where total import cost is under budget
-  const affordableCars = cars
-    .map((car) => {
-      const cost = calculateImportCost(
+  const allCarsWithCosts = await Promise.all(
+    cars.map(async (car) => {
+      const cost = await calculateWithLiveRates(
         car.averagePrice,
         car.ageEstimate,
         car.fuelType as "petrol" | "diesel",
@@ -84,6 +84,8 @@ export default async function BudgetPage({
       );
       return { car, cost };
     })
+  );
+  const affordableCars = allCarsWithCosts
     .filter(({ cost }) => cost.totalEUR <= budgetNum)
     .sort((a, b) => a.cost.totalEUR - b.cost.totalEUR);
 

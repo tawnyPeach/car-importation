@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import countries from "@/data/countries.json";
 import sourceCountries from "@/data/source-countries.json";
 import cars from "@/data/cars.json";
-import { calculateImportCost } from "@/lib/calculator";
+import { calculateWithLiveRates } from "@/lib/calculate-with-live-rates";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 type Params = {
@@ -207,8 +207,8 @@ export default async function FromSourcePage({
             : `Import Costs from ${source.name}`}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {popularCars.map((car) => {
-            const baseCost = calculateImportCost(
+          {await Promise.all(popularCars.map(async (car) => {
+            const baseCost = await calculateWithLiveRates(
               car.averagePrice,
               car.ageEstimate,
               car.fuelType as "petrol" | "diesel",
@@ -267,7 +267,7 @@ export default async function FromSourcePage({
                 </div>
               </Link>
             );
-          })}
+          }))}
         </div>
       </section>
 

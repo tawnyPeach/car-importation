@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import countries from "@/data/countries.json";
 import cars from "@/data/cars.json";
-import { calculateImportCost } from "@/lib/calculator";
+import { calculateWithLiveRates } from "@/lib/calculate-with-live-rates";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 type Car = (typeof cars)[number];
@@ -124,14 +124,14 @@ export default async function CompareCarPage({
     notFound();
   }
 
-  const costA = calculateImportCost(
+  const costA = await calculateWithLiveRates(
     car.averagePrice,
     car.ageEstimate,
     car.fuelType as "petrol" | "diesel",
     countryA.slug
   );
 
-  const costB = calculateImportCost(
+  const costB = await calculateWithLiveRates(
     car.averagePrice,
     car.ageEstimate,
     car.fuelType as "petrol" | "diesel",
@@ -375,14 +375,14 @@ export default async function CompareCarPage({
             : `Other Cars: ${countryA.name} vs ${countryB.name}`}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {otherCars.map((c) => {
-            const cCostA = calculateImportCost(
+          {await Promise.all(otherCars.map(async (c) => {
+            const cCostA = await calculateWithLiveRates(
               c.averagePrice,
               c.ageEstimate,
               c.fuelType as "petrol" | "diesel",
               countryA.slug
             );
-            const cCostB = calculateImportCost(
+            const cCostB = await calculateWithLiveRates(
               c.averagePrice,
               c.ageEstimate,
               c.fuelType as "petrol" | "diesel",
@@ -401,7 +401,7 @@ export default async function CompareCarPage({
                 </p>
               </Link>
             );
-          })}
+          }))}
         </div>
       </section>
 
