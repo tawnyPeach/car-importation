@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import countries from "@/data/countries.json";
 import cars from "@/data/cars.json";
 import { calculateImportCost } from "@/lib/calculator";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import CarGridWithFilters from "@/components/CarGridWithFilters";
+import type { CarWithCost } from "@/components/CarGridWithFilters";
 
 export function generateStaticParams() {
   const params: { lang: string; "country-slug": string }[] = [];
@@ -124,6 +125,28 @@ export default async function CountryPage({
   const flag = getCountryFlag(countrySlug);
   const faqs = getFAQs(country, lang);
 
+  // Calculate costs for all cars at the server level
+  const carsWithCosts: CarWithCost[] = cars.map((car) => {
+    const cost = calculateImportCost(
+      car.averagePrice,
+      car.ageEstimate,
+      car.fuelType as "petrol" | "diesel",
+      countrySlug
+    );
+    return {
+      name: car.name,
+      slug: car.slug,
+      averagePrice: car.averagePrice,
+      fuelType: car.fuelType,
+      ageEstimate: car.ageEstimate,
+      category: car.category,
+      brand: car.brand,
+      totalEUR: cost.totalEUR,
+      totalLocal: cost.totalLocal,
+      currency: cost.currency,
+    };
+  });
+
   const breadcrumbs = [
     { label: lang === "fr" ? "Accueil" : "Home", href: `/${lang}` },
     { label: country.name, href: `/${lang}/${countrySlug}` },
@@ -199,7 +222,7 @@ export default async function CountryPage({
         </div>
       </section>
 
-      {/* Cars Grid */}
+      {/* Cars Grid with Filters */}
       <section className="mb-12">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-[#1a1f36]">
@@ -208,63 +231,12 @@ export default async function CountryPage({
               : `Import Costs for ${cars.length} Vehicles`}
           </h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {cars.map((car) => {
-            const cost = calculateImportCost(
-              car.averagePrice,
-              car.ageEstimate,
-              car.fuelType as "petrol" | "diesel",
-              countrySlug
-            );
-            return (
-              <Link
-                key={car.slug}
-                href={`/${lang}/${countrySlug}/import/${car.slug}`}
-                className="group block bg-white rounded-xl shadow-md border border-gray-100 p-5 hover:shadow-xl hover:border-[#f59e0b]/30 hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-100 text-gray-600 uppercase">
-                    {car.category}
-                  </span>
-                  <span className="text-xs text-gray-400">{car.brand}</span>
-                </div>
-                <h3 className="font-semibold text-[#1a1f36] group-hover:text-[#10b981] transition-colors mb-1">
-                  {car.name}
-                </h3>
-                <div className="flex items-center justify-between mt-3">
-                  <div>
-                    <p className="text-xs text-gray-400">
-                      {lang === "fr" ? "Prix EU" : "EU Price"}
-                    </p>
-                    <span className="text-sm font-medium text-gray-700">
-                      &euro;{car.averagePrice.toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-gray-400">
-                      {lang === "fr" ? "Cout total" : "Total Cost"}
-                    </p>
-                    <span className="text-lg font-bold text-[#10b981]">
-                      &euro;{cost.totalEUR.toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-                <div className="mt-2 pt-2 border-t border-gray-50 flex items-center justify-between">
-                  <span className="text-xs text-gray-400">
-                    {cost.totalLocal.toLocaleString()} {cost.currency}
-                  </span>
-                  <span className="text-xs text-gray-400">
-                    {car.fuelType === "petrol"
-                      ? lang === "fr"
-                        ? "Essence"
-                        : "Petrol"
-                      : "Diesel"}
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+        <CarGridWithFilters
+          cars={carsWithCosts}
+          lang={lang}
+          countrySlug={countrySlug}
+          showFilters={true}
+        />
       </section>
 
       {/* FAQ Section */}
