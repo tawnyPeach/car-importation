@@ -21,6 +21,7 @@ const flags: Record<string, string> = {
 export default function Navigation({ lang }: { lang: string }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [countriesOpen, setCountriesOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
   const otherLang = lang === "en" ? "fr" : "en";
 
   return (
@@ -39,17 +40,17 @@ export default function Navigation({ lang }: { lang: string }) {
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link href={`/${lang}`} className="text-gray-700 hover:text-[#10b981] font-medium transition">
+        <div className="hidden md:flex items-center gap-5">
+          <Link href={`/${lang}`} className="text-gray-700 dark:text-gray-300 hover:text-[#10b981] font-medium transition">
             {lang === "fr" ? "Accueil" : "Home"}
           </Link>
-          <Link href={`/${lang}/calculator`} className="text-gray-700 hover:text-[#10b981] font-medium transition">
+          <Link href={`/${lang}/calculator`} className="text-gray-700 dark:text-gray-300 hover:text-[#10b981] font-medium transition">
             {lang === "fr" ? "Calculateur" : "Calculator"}
           </Link>
           <div className="relative">
             <button
-              onClick={() => setCountriesOpen(!countriesOpen)}
-              className="text-gray-700 hover:text-[#10b981] font-medium transition flex items-center gap-1"
+              onClick={() => { setCountriesOpen(!countriesOpen); setToolsOpen(false); }}
+              className="text-gray-700 dark:text-gray-300 hover:text-[#10b981] font-medium transition flex items-center gap-1"
             >
               {lang === "fr" ? "Pays" : "Countries"}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,12 +58,12 @@ export default function Navigation({ lang }: { lang: string }) {
               </svg>
             </button>
             {countriesOpen && (
-              <div className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 py-2 w-56 z-50">
+              <div className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 py-2 w-56 z-50">
                 {countries.map((c) => (
                   <Link
                     key={c.slug}
                     href={`/${lang}/${c.slug}`}
-                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm"
+                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm"
                     onClick={() => setCountriesOpen(false)}
                   >
                     <span>{flags[c.slug] || ""}</span>
@@ -72,13 +73,40 @@ export default function Navigation({ lang }: { lang: string }) {
               </div>
             )}
           </div>
-          <Link href={`/${lang}/compare`} className="text-gray-700 hover:text-[#10b981] font-medium transition">
-            {lang === "fr" ? "Comparer" : "Compare"}
-          </Link>
-          <Link href={`/${lang}/financing`} className="text-gray-700 hover:text-[#10b981] font-medium transition">
-            {lang === "fr" ? "Financement" : "Financing"}
-          </Link>
-          <Link href={`/${lang}/blog`} className="text-gray-700 hover:text-[#10b981] font-medium transition">
+          <div className="relative">
+            <button
+              onClick={() => { setToolsOpen(!toolsOpen); setCountriesOpen(false); }}
+              className="text-gray-700 dark:text-gray-300 hover:text-[#10b981] font-medium transition flex items-center gap-1"
+            >
+              {lang === "fr" ? "Outils" : "Tools"}
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {toolsOpen && (
+              <div className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 py-2 w-64 z-50">
+                <Link href={`/${lang}/compare`} className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm" onClick={() => setToolsOpen(false)}>
+                  {lang === "fr" ? "Comparer les Pays" : "Compare Countries"}
+                </Link>
+                <Link href={`/${lang}/compare-cars`} className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm" onClick={() => setToolsOpen(false)}>
+                  {lang === "fr" ? "Comparer les Voitures" : "Compare Cars Side by Side"}
+                </Link>
+                <Link href={`/${lang}/financing`} className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm" onClick={() => setToolsOpen(false)}>
+                  {lang === "fr" ? "Calculateur de Financement" : "Financing Calculator"}
+                </Link>
+                <Link href={`/${lang}/total-cost`} className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm" onClick={() => setToolsOpen(false)}>
+                  {lang === "fr" ? "Cout Total de Possession" : "Total Cost of Ownership"}
+                </Link>
+                <Link href={`/${lang}/vin-decoder`} className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm" onClick={() => setToolsOpen(false)}>
+                  {lang === "fr" ? "Decodeur VIN" : "VIN Decoder"}
+                </Link>
+                <Link href={`/${lang}/how-it-works`} className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm" onClick={() => setToolsOpen(false)}>
+                  {lang === "fr" ? "Comment ca Marche" : "How it Works"}
+                </Link>
+              </div>
+            )}
+          </div>
+          <Link href={`/${lang}/blog`} className="text-gray-700 dark:text-gray-300 hover:text-[#10b981] font-medium transition">
             Blog
           </Link>
           <Link
@@ -104,38 +132,56 @@ export default function Navigation({ lang }: { lang: string }) {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3">
-          <Link href={`/${lang}`} className="block text-gray-700 font-medium" onClick={() => setMobileOpen(false)}>
+        <div className="md:hidden bg-white dark:bg-[#0f1218] border-t border-gray-100 dark:border-gray-800 px-4 py-4 space-y-3">
+          <Link href={`/${lang}`} className="block text-gray-700 dark:text-gray-300 font-medium" onClick={() => setMobileOpen(false)}>
             {lang === "fr" ? "Accueil" : "Home"}
           </Link>
-          <Link href={`/${lang}/calculator`} className="block text-gray-700 font-medium" onClick={() => setMobileOpen(false)}>
+          <Link href={`/${lang}/calculator`} className="block text-gray-700 dark:text-gray-300 font-medium" onClick={() => setMobileOpen(false)}>
             {lang === "fr" ? "Calculateur" : "Calculator"}
           </Link>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide pt-2">{lang === "fr" ? "Pays" : "Countries"}</p>
           <div className="pl-2 space-y-2">
             {countries.map((c) => (
               <Link
                 key={c.slug}
                 href={`/${lang}/${c.slug}`}
-                className="block text-gray-600 text-sm"
+                className="block text-gray-600 dark:text-gray-400 text-sm"
                 onClick={() => setMobileOpen(false)}
               >
                 {flags[c.slug]} {c.name}
               </Link>
             ))}
           </div>
-          <Link href={`/${lang}/compare`} className="block text-gray-700 font-medium" onClick={() => setMobileOpen(false)}>
-            {lang === "fr" ? "Comparer" : "Compare"}
-          </Link>
-          <Link href={`/${lang}/financing`} className="block text-gray-700 font-medium" onClick={() => setMobileOpen(false)}>
-            {lang === "fr" ? "Financement" : "Financing"}
-          </Link>
-          <Link href={`/${lang}/blog`} className="block text-gray-700 font-medium" onClick={() => setMobileOpen(false)}>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide pt-2">{lang === "fr" ? "Outils" : "Tools"}</p>
+          <div className="pl-2 space-y-2">
+            <Link href={`/${lang}/compare`} className="block text-gray-600 dark:text-gray-400 text-sm" onClick={() => setMobileOpen(false)}>
+              {lang === "fr" ? "Comparer les Pays" : "Compare Countries"}
+            </Link>
+            <Link href={`/${lang}/compare-cars`} className="block text-gray-600 dark:text-gray-400 text-sm" onClick={() => setMobileOpen(false)}>
+              {lang === "fr" ? "Comparer les Voitures" : "Compare Cars"}
+            </Link>
+            <Link href={`/${lang}/financing`} className="block text-gray-600 dark:text-gray-400 text-sm" onClick={() => setMobileOpen(false)}>
+              {lang === "fr" ? "Financement" : "Financing"}
+            </Link>
+            <Link href={`/${lang}/total-cost`} className="block text-gray-600 dark:text-gray-400 text-sm" onClick={() => setMobileOpen(false)}>
+              {lang === "fr" ? "Cout Total" : "Total Cost"}
+            </Link>
+            <Link href={`/${lang}/vin-decoder`} className="block text-gray-600 dark:text-gray-400 text-sm" onClick={() => setMobileOpen(false)}>
+              {lang === "fr" ? "Decodeur VIN" : "VIN Decoder"}
+            </Link>
+            <Link href={`/${lang}/how-it-works`} className="block text-gray-600 dark:text-gray-400 text-sm" onClick={() => setMobileOpen(false)}>
+              {lang === "fr" ? "Comment ca Marche" : "How it Works"}
+            </Link>
+          </div>
+          <Link href={`/${lang}/blog`} className="block text-gray-700 dark:text-gray-300 font-medium" onClick={() => setMobileOpen(false)}>
             Blog
           </Link>
-          <Link href={`/${otherLang}`} className="inline-block px-3 py-1 rounded-full border border-[#10b981] text-[#10b981] text-sm font-semibold">
-            {otherLang.toUpperCase()}
-          </Link>
-          <DarkModeToggle />
+          <div className="flex items-center gap-3 pt-2">
+            <Link href={`/${otherLang}`} className="inline-block px-3 py-1 rounded-full border border-[#10b981] text-[#10b981] text-sm font-semibold">
+              {otherLang.toUpperCase()}
+            </Link>
+            <DarkModeToggle />
+          </div>
         </div>
       )}
     </header>
