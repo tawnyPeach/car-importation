@@ -14,6 +14,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        {/* Google AdSense: Add your AdSense script tag below once you have a publisher ID */}
+        {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossOrigin="anonymous"></script> */}
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         {children}
